@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LeavesMain extends ApplicationAdapter {
     private Stage stage;
 
@@ -18,17 +21,26 @@ public class LeavesMain extends ApplicationAdapter {
 	public void create () {
         final Texture img = new Texture("leaf.png");
         final Texture img2 = new Texture("leaf2.png");
+        final Map<String, Texture> textures = new HashMap<String, Texture>();
+        loadTexture(textures, "leaf");
+        loadTexture(textures, "leaf2");
+        loadTexture(textures, "half-leaf");
+        loadTexture(textures, "half-leaf2");
         stage = new Stage(new FitViewport(112, 160));
         Gdx.input.setInputProcessor(stage);
         Action generateLeaves = Actions.forever(new SequenceAction(new RandomDelayAction(0.25f, 0.75f), new Action() {
             @Override
             public boolean act(float delta) {
-                stage.addActor(new Leaf(MathUtils.randomBoolean() ? -1 : 1, MathUtils.random(112), 160, img, img2));
+                stage.addActor(new Leaf(stage, MathUtils.randomBoolean() ? -1 : 1, MathUtils.random(112), 160, textures));
                 return true;
             }
         }));
         stage.addAction(generateLeaves);
 	}
+
+    private void loadTexture(Map<String, Texture> textures, String s) {
+        textures.put(s, new Texture(s + ".png"));
+    }
 
     @Override
 	public void render () {

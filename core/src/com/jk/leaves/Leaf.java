@@ -6,16 +6,22 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+
+import java.util.Map;
 
 /**
  * Created by jameskozianski on 11/15/14.
  */
 public class Leaf extends Actor {
+
+    private Stage stage;
 
     private static class ChangeTextureAction extends Action {
         private Texture texture;
@@ -37,8 +43,11 @@ public class Leaf extends Actor {
 
     private final Sprite sprite;
 
-    public Leaf(float direction, float x, float y, Texture image, Texture image2) {
+    public Leaf(final Stage stage, float direction, float x, float y, final Map<String, Texture> textures) {
+        this.stage = stage;
         boolean order = MathUtils.randomBoolean();
+        Texture image = textures.get("leaf");
+        Texture image2 = textures.get("leaf2");
         sprite = new Sprite(order ? image : image2);
         setTouchable(Touchable.enabled);
         setPosition(x, y);
@@ -58,8 +67,9 @@ public class Leaf extends Actor {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.addActor(new Giblet(-1, getX(), getY(), textures));
+                stage.addActor(new Giblet(1, getX() + 5, getY() + 5, textures));
                 Leaf.this.remove();
-                System.out.println("whahaaaa");
                 return true;
             }
         });
