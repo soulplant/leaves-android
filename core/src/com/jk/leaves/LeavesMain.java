@@ -10,16 +10,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class LeavesMain extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img;
     private BitmapFont font;
-    private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private Group leaves;
 
@@ -30,19 +33,28 @@ public class LeavesMain extends ApplicationAdapter {
         camera.translate(112 / 2, 160 / 2);
         camera.update();
 		batch = new SpriteBatch();
-        img = new Texture("leaf.png");
+        final Texture img = new Texture("leaf.png");
+        final Texture img2 = new Texture("leaf2.png");
         font = new BitmapFont();
         font.scale(3);
         leaves = new Group();
-        Gdx.input.setInputProcessor(new InputAdapter() {
+//        Gdx.input.setInputProcessor(new InputAdapter() {
+//            @Override
+//            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+//                Vector3 gameCoords = camera.unproject(new Vector3(screenX, screenY, 0));
+//                System.out.println("hi there " + gameCoords);
+//                leaves.addActor(new Leaf(MathUtils.randomBoolean() ? -1 : 1, gameCoords.x, gameCoords.y, img, img2));
+//                return true;
+//            }
+//        });
+        Action generateLeaves = Actions.forever(new SequenceAction(new RandomDelayAction(0.25f, 0.75f), new Action() {
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                Vector3 gameCoords = camera.unproject(new Vector3(screenX, screenY, 0));
-                System.out.println("hi there " + gameCoords);
-                leaves.addActor(new Leaf(gameCoords.x, gameCoords.y, img));
+            public boolean act(float delta) {
+                leaves.addActor(new Leaf(MathUtils.randomBoolean() ? -1 : 1, MathUtils.random(112), 160, img, img2));
                 return true;
             }
-        });
+        }));
+        leaves.addAction(generateLeaves);
 	}
 
     @Override
