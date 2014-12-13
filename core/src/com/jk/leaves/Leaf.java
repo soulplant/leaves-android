@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -67,8 +68,10 @@ public class Leaf extends Actor {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.addActor(new Giblet(-1, getX(), getY(), textures));
-                stage.addActor(new Giblet(1, getX() + 5, getY() + 5, textures));
+                Vector2 v1 = Util.getRandomDirection().scl(30);
+                Vector2 v2 = Util.getRandomDirection().scl(40);
+                stage.addActor(new Particle(getX(), getY(), v1, 0, textures.get("half-leaf")));
+                stage.addActor(new Particle(getX(), getY(), v2, 0, textures.get("half-leaf2")));
                 Leaf.this.remove();
                 return true;
             }
