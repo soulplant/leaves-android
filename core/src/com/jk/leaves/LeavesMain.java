@@ -6,9 +6,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.HashMap;
@@ -27,6 +32,13 @@ public class LeavesMain extends ApplicationAdapter {
         loadTexture(textures, "half-leaf");
         loadTexture(textures, "half-leaf2");
         stage = new Stage(new FitViewport(112, 160));
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println(x + ", " + y + " touched");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
         Gdx.input.setInputProcessor(stage);
         Action generateLeaves = Actions.forever(new SequenceAction(new RandomDelayAction(0.25f, 0.75f), new Action() {
             @Override

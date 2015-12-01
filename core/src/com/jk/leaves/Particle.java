@@ -22,14 +22,26 @@ public class Particle extends Actor {
     public Particle(float x, float y, Vector2 delta, float lifetime, Texture texture) {
         this.dx = delta.x;
         this.dy = delta.y;
+        // TODO Paramaterise this background velocity.
+        final Vector2 bg = new Vector2();
+        bg.x = 9f;
+        bg.y = 5f;
         this.lifetime = lifetime;
         setPosition(x, y);
         this.texture = texture;
         addAction(new Action() {
             @Override
             public boolean act(float delta) {
-                setX(getX() - delta * Particle.this.dx);
-                setY(getY() - delta * Particle.this.dy);
+                float dx = Particle.this.dx;
+                if (Math.abs(dx) < Math.abs(bg.x)) {
+                    dx = bg.x;
+                }
+                setX(getX() - dx * delta);
+                float dy = Particle.this.dy;
+                if (Math.abs(dy) < Math.abs(bg.y)) {
+                    dy = bg.y;
+                }
+                setY(getY() - dy * delta);
                 Particle.this.dx = reduceBy(Particle.this.dx, ddx);
                 Particle.this.dy = reduceBy(Particle.this.dy, ddy);
                 return false;

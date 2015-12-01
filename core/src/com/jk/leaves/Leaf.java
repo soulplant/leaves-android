@@ -17,9 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import java.util.Map;
 
-/**
- * Created by jameskozianski on 11/15/14.
- */
 public class Leaf extends Actor {
 
     private Stage stage;
